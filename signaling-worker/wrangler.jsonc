@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "rdp-signaling",
+  "account_id": "3fb1e6f98a6ab2ac759d9c441b9bbb44",
   "main": "src/index.ts",
   "compatibility_date": "2026-07-23",
   "observability": {
