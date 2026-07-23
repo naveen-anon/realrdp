@@ -1,6 +1,9 @@
 package com.naveen.realrdp
 
-import android.app.*
+import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
@@ -12,6 +15,7 @@ import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.IBinder
 import android.util.DisplayMetrics
+import android.view.Display
 import androidx.core.app.NotificationCompat
 
 class ScreenCaptureService : Service() {
@@ -39,10 +43,12 @@ class ScreenCaptureService : Service() {
 
         startForeground(1, notification)
 
-        val resultCode = intent?.getIntExtra("resultCode", Activity.RESULT_CANCELED) ?: return START_NOT_STICKY
-        val data = intent.getParcelableExtra<Intent>("data") ?: return START_NOT_STICKY
+        val resultCode = intent?.getIntExtra("resultCode", Activity.RESULT_CANCELED)
+            ?: return START_NOT_STICKY
+        val data = intent.getParcelableExtra<Intent>("data")
+            ?: return START_NOT_STICKY
 
-        val mpm = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        val mpm = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         mediaProjection = mpm.getMediaProjection(resultCode, data)
 
         setupVirtualDisplay()
@@ -65,7 +71,7 @@ class ScreenCaptureService : Service() {
         virtualDisplay = mediaProjection?.createVirtualDisplay(
             "RealRDP_Display",
             width, height, density,
-            android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+            DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
             imageReader?.surface,
             null, null
         )
